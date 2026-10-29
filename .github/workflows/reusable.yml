@@ -7,16 +7,28 @@ on:
         required: false                                     #
         default: dist                                       #
         type: string                                        #
- 
+    
+    outputs:                                                # output for workflow
+      result:                                               #
+        description: Result of deployment                   #
+        value: ${{ jobs.deploy.outputs.outcome }}           #
+   #secrets:
+     # some-secret:
+      #  required: false
 jobs:
-    deploy:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Output information
-              run: echo "Deploy and upload ..."
-            - name: Get code                               # 
-              uses: actions/download-artifact@v8           # 
-              with:                                        #    
-                name: ${{ inputs.artifact-name }}          # 
-            - name: List files                             # 
-              run: ls                                      # Added inputs to reusable workflow
+  deploy:
+    outputs:
+      outcome: ${{ steps.set-result.outputs.step-result }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output information
+        run: echo "Deploy and upload ..."
+      - name: Get code                               # 
+        uses: actions/download-artifact@v8           # 
+        with:                                        #    
+          name: ${{ inputs.artifact-name }}          # 
+      - name: List files                             # 
+        run: ls                                      # Added inputs to reusable workflow
+      - name: Set result output
+        id: set-result
+        run: echo "step-result=success" >> $GITHUB_OUTPUT 
