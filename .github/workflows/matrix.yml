@@ -4,13 +4,13 @@ jobs:
     build:
         continue-on-error: true
         strategy:
-          matrix:
+          matrix:                     # use this function to create array of node versions with defined machines
             node-version: [22, 24, 26]
             operating-system: [ubuntu-latest, windows-latest]
-            include:
+            include:                  # include the version
               - node-version: 26
                 operating-system: ubuntu-latest
-            exclude:
+            exclude:                  # exclude the version
               - node-version: 22
                 operating-system: windows-latest
         runs-on: ${{ matrix.operating-system }}
